@@ -1,0 +1,51 @@
+;; Window Matchers
+
+( add-window-matcher '( ( WM_CLASS . "^Pager/pager$" ) )
+       '( ( position . south-east )
+          ( fixed-positon . t )
+          ( never-maximize . t )
+          ( never-iconify . t )
+          ( frame-type . none )
+          ( cycle-skip . t )
+          ( window-list-skip . t )
+          ( sticky . t )
+          ( sticky-viewport . t )
+          ( depth .  -12 ) ) )
+
+;; Application Keymacros
+
+( define apps-keymap ( make-keymap ) )
+( bind-keys global-keymap "W-e" apps-keymap )
+
+( bind-keys apps-keymap
+  "c" `( jump-or-exec "Claws-Mail" "claws-mail" t )
+  "g" `( jump-or-exec "GPRename" "gprename" nil )
+  "m" `( jump-or-exec "MPlayer" "mplayer" nil )
+  "o" `( jump-or-exec "Gtkorphan" "gksu -u root gtkorphan" t )
+  "s" `( jump-or-exec "Screenlets-manager.py" "screenlets-manager" t )
+  "t" `( jump-or-exec "Flush" "flush" nil )
+  "z" '( system "gksu -u root /etc/init.d/network-manager restart &" )
+  "u" '( system "gksu -u root /etc/init.d/privoxy restart &" ) )
+
+;; Animation [Yep, Sawfish Maintainers also are Human Beeings]
+
+( define-special-variable default-window-animator 'wireframe )
+( define-special-variable anim-outline-icon-coords '( 0 . 0 ) )
+( define-special-variable anim-outline-steps 45 )
+( define-special-variable anim-outline-delay 15 )
+( define-special-variable move-outline-mode 'cross )
+( define-special-variable resize-outline-mode 'elliptical )
+
+;; Look'n'Feel
+
+;( define-special-variable default-frame-style 'Zami-like-saw )
+( define-special-variable decorate-transients t )
+( define-special-variable use-custom-font-color nil )
+( define-special-variable frame-font-active-color "white" )
+( define-special-variable frame-font-inactive-color "grey85" )
+
+;; Cycling
+
+( define-special-variable cycle-all-workspaces t )
+( define-special-variable cycle-all-viewports t )
+( define-special-variable cycle-raise-windows nil )

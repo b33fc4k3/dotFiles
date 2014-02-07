@@ -1,0 +1,124 @@
+borderwidth 1
+color activeborder rgb:E1/CA/5A
+color inactiveborder rgb:BC/BE/B3
+#gap 20 4 4 4
+gap 0 0 0 0
+moveamount 10
+
+# Turn on sticky-group mode
+sticky yes
+
+# Any entry here is shown in the application menu
+command dmenu			dmenu_run
+command terminal		urxvtc
+command tmux			"uxterm -e tmux"
+command thunar			thunar
+command editor			geany
+command firefox         firefox
+command thunderbird		thunderbird
+command gimp			gimp
+
+# Ignore programs by that name by not drawing borders around them.
+ignore XMMS
+ignore xclock
+ignore conky
+ignore dzen2
+ignore dmenu
+
+# Keybindings
+bind CM-r       label
+bind CS-Return  "xterm -e top"
+bind 4-o        unmap
+bind CM-equal   unmap
+bind CMS-equal  unmap
+
+bind 4-0 nogroup
+bind 4-1        grouponly1
+bind 4-2        grouponly2
+bind 4-3        grouponly3
+bind 4S-1       movetogroup1
+bind 4S-2       movetogroup2
+bind 4S-3       movetogroup3
+
+# user bindings
+bind M-F1 "urxvtc"
+bind M-F3 "urxvtc -e tmux"
+bind M-F5 raise
+bind M-F6 lower
+
+bind 4S-v vmaximize
+bind 4S-h hmaximize
+bind 4-f maximize
+
+bind 4-p "dmenu_run"
+bind 4-e emacs
+bind 4-t terminator
+bind 4-c terminal
+bind CM-l lock
+bind 4-s search
+bind 4S-s menusearch
+bind 4S-p exec
+bind 4S-c delete
+bind 4-i "transset .8"
+bind M-Tab cycle
+
+bind 4-q restart
+bind 4S-q quit
+#     terminal            Spawn a new terminal.
+#     lock                Lock the screen.
+#     search              Launch window search menu.
+#     menusearch          Launch application search menu.
+#     exec                Launch “exec program” menu.
+#     exec_wm             Launch “exec WindowManager” menu.
+#     ssh                 Launch “ssh” menu.
+#     group[n]            Select group n, where n is 1-9.
+#     grouponly[n]        Like group[n] but also hides the other groups.
+#     nogroup             Select all groups.
+#     grouptoggle         Toggle group membership of current window.
+#     movetogroup[n]      Hide current window from display and move to group n, where n is 1-9.
+#     cyclegroup          Forward cycle through groups.
+#     rcyclegroup         Reverse cycle through groups.
+#     cycle               Forward cycle through windows.
+#     rcycle              Reverse cycle through windows.
+#     cycleingroup        Forward cycle through windows in current group.
+#     rcycleingroup       Reverse cycle through windows in current group.
+#     delete              Delete current window.
+#     hide                Hide current window.
+#     lower               Lower current window.
+#     raise               Raise current window.
+#     label               Label current window.
+#     freeze              Freeze current window geometry.
+bind MS-Up bigmoveup
+bind MS-Down bigmovedown
+bind MS-Left bigmoveleft
+bind MS-Right bigmoveright
+bind C4-Up resizeup
+bind C4-Down resizedown
+bind C4-Left resizeleft
+bind C4-Right resizeright
+
+#     ptrmoveup           Move pointer moveamount pixels up.
+#     ptrmovedown         Move pointer moveamount pixels down.
+#     ptrmoveright        Move pointer moveamount pixels right.
+#     ptrmoveleft         Move pointer moveamount pixels left.
+#     bigptrmoveup        Move pointer 10 times moveamount pixels up.
+#     bigptrmovedown      Move pointer 10 times moveamount pixels down.
+#     bigptrmoveright     Move pointer 10 times moveamount pixels right.
+#     bigptrmoveleft      Move pointer 10 times moveamount pixels left.
+
+bind 4-h htile
+bind 4-v vtile
+
+# MOUSEBIND COMMAND LIST
+#     window_move         Move current window.
+#     window_resize       Resize current window.
+#     window_lower        Lower current window.
+#     window_raise        Raise current window.
+#     window_hide         Hide current window.
+#     window_grouptoggle  Toggle group membership of current window.
+#     menu_group          Launch group list.
+#     menu_unhide         Launch hidden window list.
+#     menu_cmd            Launch command list.
+mousebind M-2   window_lower
+mousebind M-3   window_resize
+

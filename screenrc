@@ -1,0 +1,17 @@
+# escape ^gg # would set Ctrl-a to Ctrl-g
+startup_message off
+# autodetach off
+# defscrollback 5000
+# shell /bin/fish
+# term rxvt-unicode
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+hardstatus alwayslastline
+hardstatus string '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}]%{=b C}[ %m/%d %c ]%{W}'
+
+screen -t cmd 1 fish
+screen -t dev 2 fish
+#screen -t repl 3 "ghci scripts/redo/redo.hs"
+screen -t inet 4 fish
+screen -t man 5 top

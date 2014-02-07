@@ -1,0 +1,304 @@
+;; vim: set filetype=lisp:
+; -*-Lisp-*-
+
+;;; stumpwmrc
+
+(in-package :stumpwm)
+(setf *default-package* :stumpwm)
+
+; STARTUP --------------------------------------------------------------------------------
+(run-shell-command "xmodmap -e 'remove Lock = Caps_Lock'")
+(run-shell-command "xmodmap -e 'keysym Caps_Lock = Control_L'")
+(run-shell-command "xmodmap -e 'add Control = Control_L'")
+
+(run-shell-command "feh --bg-scale Bilder/wallpaper/Haguro_san_Path_to_the_summit_2006.jpg")
+(run-shell-command "xcompmgr -l 0.5 -t 0.5 -o 0.5 -r 2 -c")
+;(run-shell-command "thunar-daemon")
+
+(setf *startup-message* "Guten Morgen Marten")
+(setf *suppress-frame-indicator* t)
+; WINDOW STYLE ---------------------------------------------------------------------------
+; change gruesome colors damnit
+(set-focus-color "darkblue")
+(set-unfocus-color "black")
+
+(setf *message-window-gravity* :center
+      *timeout-wait*           3
+      *input-window-gravity*   :center)
+
+(set-normal-gravity :center)
+(setf *mouse-focus-policy* :click)
+(setf *normal-border-width* 1)
+
+; MODE LINE ------------------------------------------------------------------------------
+(setf *mode-line-background-color* "black"
+      *mode-line-foreground-color* "darkgray"
+      *mode-line-border-color*     "white"
+      *mode-line-timeout*          1
+      *mode-line-position*         :bottom
+      *mode-line-border-width*     0)
+
+(setf stumpwm:*screen-mode-line-format*
+      (list
+            '(:eval (string-trim '(#\Newline)
+				 (run-shell-command "date" t)))
+	    " | %g | " "%w " ))
+
+(if (not (head-mode-line (current-head)))
+     (toggle-mode-line (current-screen) (current-head)))
+
+; GROUPS ---------------------------------------------------------------------------------
+(run-commands
+      "grename cmd"
+      "gnewbg www"
+      "gnewbg dev"
+      "gnewbg pdf")
+
+; COMMANDS -------------------------------------------------------------------------------
+(defcommand dmenu () ()
+  "Runs the dmenu program"
+  (run-shell-command "dmenu_run -b -i -nb '#000000' -nf '#777777' -sb '#770000' -sf '#ffffff' -p '> '"))
+
+(defcommand emacs () ()
+  "run emacs"
+  (run-or-raise "emacs" '(:class "Emacs")))
+
+(defcommand terminal () ()
+  "run terminal"
+  (run-or-raise "sakura" '(:instance "sakura")))
+
+(defcommand urxvt () ()
+  "run urxvt"
+  (run-or-raise "urxvt" '(:instance "urxvt")))
+
+(defcommand browser () ()
+  "run firefox"
+  (run-or-raise "firefox" '(:class "Firefox")))
+
+(defcommand suspend () ()
+  "suspend Netbook"
+  (run-or-raise "sudo /usr/sbin/pm-suspend" '(:class "PM")))
+
+(defcommand runterfahren () ()
+  "Netbook runterfahren"
+  (run-or-raise "sudo shutdown -h now" '(:class "PM")))
+
+(defcommand battery () ()
+  "Batterie anzeigen"
+  (echo-string (current-screen) (run-shell-command "acpitool -b" t)))
+
+(defcommand transparency () ()
+  "transset 0.7 aufrufen"
+  (run-or-raise "transset .7" '(:class "Style")))
+
+(defcommand remove-transparency () ()
+  "transset 1 aufrufen"
+  (run-or-raise "transset 1" '(:class "Style")))
+
+(defcommand volumeTgl () ()
+  "Lautstäke 100% / 0%"
+  (run-shell-command "amixer set Master mute"))
+
+(defcommand wikipedia (search)
+  ((:string "Search in Wikipedia for: "))
+  "docstring"
+  (check-type search string)
+  (substitute #\+ #\Space search)
+  (run-shell-command (cat "firefox http://www.wikipedia.org/wiki/" search)))
+
+(defcommand google (search)
+  ((:string "Search in Google for: "))
+  "docstring"
+  (check-type search string)
+  (substitute #\+ #\Space search)
+  (run-shell-command (cat "firefox http://www.google.com/search?q=" search)))
+
+; KEYS -----------------------------------------------------------------------------------
+(set-prefix-key (kbd "C-i"))
+
+(define-key *top-map* (kbd "M-k") "move-focus up")
+(define-key *top-map* (kbd "M-j") "move-focus down")
+(define-key *top-map* (kbd "M-l") "move-focus right")
+(define-key *top-map* (kbd "M-h") "move-focus left")
+(define-key *top-map* (kbd "C-M-k") "move-window up")
+(define-key *top-map* (kbd "C-M-j") "move-window down")
+(define-key *top-map* (kbd "C-M-l") "move-window right")
+(define-key *top-map* (kbd "C-M-h") "move-window left")
+
+(define-key *top-map* (kbd "M-1") "gselect 1")
+(define-key *top-map* (kbd "M-2") "gselect 2")
+(define-key *top-map* (kbd "M-3") "gselect 3")
+(define-key *top-map* (kbd "M-4") "gselect 4")
+(define-key *top-map* (kbd "M-s") "hsplit")
+(define-key *top-map* (kbd "M-S") "vsplit")
+(define-key *root-map* (kbd "1") "only")
+(define-key *root-map* (kbd "3") "hsplit")
+(define-key *root-map* (kbd "2") "vsplit")
+(define-key *top-map* (kbd "M-p") "dmenu")
+(define-key *top-map* (kbd "M-Return") "fullscreen")
+(define-key *top-map* (kbd "M-Tab") "pull-hidden-next")
+
+(define-key *root-map* (kbd "m") "mode-line")
+(define-key *root-map* (kbd "b") "battery")
+(define-key *root-map* (kbd "#") "transparency")
+(define-key *root-map* (kbd "'") "remove-transparency")
+(define-key *root-map* (kbd "q") "suspend")
+(define-key *root-map* (kbd "M-q") "runterfahren")
+
+(define-key *root-map* (kbd "e") "emacs")
+(define-key *root-map* (kbd "C-e") "emacs")
+(define-key *root-map* (kbd "c") "urxvt")
+(define-key *root-map* (kbd "C-c") "urxvt")
+(define-key *root-map* (kbd "t") "terminal")
+(define-key *root-map* (kbd "C-t") "terminal")
+(define-key *root-map* (kbd "f") "browser")
+(define-key *root-map* (kbd "C-f") "browser")
+
+(define-key *root-map* (kbd "W") "wikipedia")
+(define-key *root-map* (kbd "w") "google")
+
+; MARTEN 31.01.2014
+; Super-Key Top-Bindings (Win-Key ... XMonad like)
+(define-key *top-map* (kbd "s-k") "move-focus up")
+(define-key *top-map* (kbd "s-j") "move-focus down")
+(define-key *top-map* (kbd "s-l") "move-focus right")
+(define-key *top-map* (kbd "s-h") "move-focus left")
+(define-key *top-map* (kbd "s-C-k") "move-window up")
+(define-key *top-map* (kbd "s-C-j") "move-window down")
+(define-key *top-map* (kbd "s-C-l") "move-window right")
+(define-key *top-map* (kbd "s-C-h") "move-window left")
+
+; C-t g m move to group name or number
+(define-key *top-map* (kbd "s-w") "windowlist")
+(define-key *top-map* (kbd "s-W") "grouplist")
+(define-key *top-map* (kbd "s-1") "gselect 1")
+(define-key *top-map* (kbd "s-2") "gselect 2")
+(define-key *top-map* (kbd "s-3") "gselect 3")
+(define-key *top-map* (kbd "s-4") "gselect 4")
+(define-key *top-map* (kbd "s-C-1") "gmove 1")
+(define-key *top-map* (kbd "s-C-2") "gmove 2")
+(define-key *top-map* (kbd "s-C-3") "gmove 3")
+(define-key *top-map* (kbd "s-C-4") "gmove 4")
+
+
+(define-key *top-map* (kbd "s-C") "delete")
+(define-key *top-map* (kbd "s-r") "remove")
+
+(define-key *top-map* (kbd "s-Return") "fullscreen")
+(define-key *top-map* (kbd "s-f") "fullscreen")
+(define-key *top-map* (kbd "s-s") "hsplit")
+(define-key *top-map* (kbd "s-S") "vsplit")
+(define-key *top-map* (kbd "s-d") "hsplit 2/3")
+(define-key *top-map* (kbd "s-v") "vsplit 2/3")
+(define-key *root-map* (kbd "1") "only")
+(define-key *root-map* (kbd "3") "hsplit")
+(define-key *root-map* (kbd "2") "vsplit")
+(define-key *top-map* (kbd "s-p") "dmenu")
+(define-key *top-map* (kbd "s-Tab") "pull-hidden-next")
+
+; MENU -----------------------------------------------------------------------------------
+(defparameter *start-menu*
+  '(
+    ("Graphics"
+     ("Color Picker"   "gcolor2")
+     ("GIMP"           "gimp")
+     ("Inkscape"       "inkscape")
+     ("Picasa"         "picasa")
+     ("Scanner"        "xsane")
+     ("OCR"            "gocr"))
+
+    ("Internet"
+     ("Filezilla" "filezilla")
+     ("Firefox"   "firefox")
+     ("Skype"     "skype"))
+
+    ("Office"
+     ("OpenOffice.org"  "openoffice"))
+
+    ("Sound and Video"
+     ("Europe 1"      "mplayer http://vipicecast.yacast.net/europe1")
+     ("RTL"           "mplayer http://streaming.radio.rtl.fr/rtl-1-44-96")
+     ("Mixer"         "xterm -rv -e alsamixer")
+     ("K3b Burner"    "k3b")
+     ("Eject CD-ROM"  "eject cdrom"))
+
+    ("System Tools"
+     ("Calculator"        "speedcrunch")
+     ("Disk space"        "filelight")
+     ("File Manager"      "nautilus")  ; thunar
+     ("Nvidia X Server"   "nvidia-settings")
+     ("Power Preferences" "gnome-power-preferences")
+     ("Printers"          "system-config-printer")
+     ("Terminal Server"   "tsclient")
+         ; Turn on "Enable window manager's key bindings" for prefix key to
+         ; be passed seamlessly (when *not* in full screen).
+         ; Toggle between full screen and not full screen using
+         ; `Ctrl-Alt-Enter'.
+
+     ;; > In the case of Rdesktop you have to launch the app with the option
+     ;; > '-K' so Stump can retain control over the key combinations that you
+     ;; > input inside the remote session.
+
+     ("VirtualBox"       "VirtualBox"))
+
+    ("X Windows Tools"
+     ("Clipboard"  "xclipboard")
+     ("Fonts"      "xfontsel")
+     ("Ruler"      "kruler")
+     ("Events"     "xev"))
+    ))
+
+(defcommand menu () ()
+  "docstring"
+  (labels ((pick (options)
+                 (let ((selection (stumpwm::select-from-menu
+                                   (current-screen) options "")))
+                   (cond
+                    ((null selection)
+                     (throw 'stumpwm::error "Abort."))
+                    ((stringp (second selection))
+                     (second selection))
+                    (t
+                     (pick (cdr selection)))))))
+    (let ((choice (pick *start-menu*)))
+      (run-shell-command choice))))
+
+(define-key *root-map* (kbd ".") "menu")
+
+(defun shell-command (command)
+  "Run a shell command and display output to screen. This must be used in a functional side-effects-free style! If a program does not exit of its own accord, Stumpwm might hang!"
+  (check-type command string)
+  (echo-string (current-screen) (run-shell-command command t)))
+
+(define-stumpwm-command "shell-command" ((command :string "sh: " :string))
+  (check-type command string)
+  (shell-command command))
+
+(defun cat (&rest strings)
+  "Concatenates strings, like the Unix command 'cat'. A shortcut for (concatenate 'string foo bar)."
+  (apply 'concatenate 'string strings))
+
+;; (defun key-press-hook (key key-seq cmd)
+;;   (declare (ignore key))
+;;   (unless (eq *top-map* *resize-map*)
+;;     (let ((*message-window-gravity* :bottom-right))
+;;       (message "Key sequence: ~a" (print-key-seq (reverse key-seq))))
+;;     (when (stringp cmd)
+;;       ;; give 'em time to read it
+;;       (sleep 0.5))))
+
+;; (defmacro replace-hook (hook fn)
+;;   `(remove-hook ,hook ,fn)
+;;   `(add-hook ,hook ,fn))
+
+;; (replace-hook *key-press-hook* 'key-press-hook)
+
+;; Modeline Group Scrolling - make sure *screen-mode-line-format* has a "%g"
+(setf stumpwm:*mode-line-click-hook*
+      (list (lambda (&rest args)
+	      (cond ((eq (second args) 5)
+		     (run-commands "gnext"))
+                    ((eq (second args) 4)
+                     (run-commands "gprev"))))))
+
+; vim blabla

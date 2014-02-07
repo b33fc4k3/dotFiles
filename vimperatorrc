@@ -1,0 +1,12 @@
+"3.7.1 (created: 2013/05/22 20:32:57)
+
+highlight Hint font:"DejaVu Sans Mono";font-size:120%;color:red;background-color:yellow;padding:2px;
+map b gt
+map B gT
+map a B
+set complete=hbsf
+set showstatuslinks=2
+set visualbell
+source! /home/marten/.vimperatorrc.local
+
+" vim: set ft=vimperator:
